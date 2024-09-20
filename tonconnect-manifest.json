@@ -1,5 +1,5 @@
 {
-  "url": "https://fahrenheiten.github.io/", // URL вашего приложения
-  "name": "Buy Pictures",                   // Название вашего приложения
-  "iconUrl": "https://fahrenheiten.github.io/icon.png", // URL иконки вашего приложения
+  "url": "https://fahrenheiten.github.io/",
+  "name": "Buy Pictures",                 
+  "iconUrl": "https://fahrenheiten.github.io/icon.png", 
 }
