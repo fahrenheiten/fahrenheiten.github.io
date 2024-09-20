@@ -1,5 +1,6 @@
 {
   "manifest_version": 1,
+  "id": "my-ton-app",
   "name": "My TON App",
   "icon_url": "https://fahrenheiten.github.io/icon.png",
   "url": "https://fahrenheiten.github.io/"
