@@ -3,13 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop</title>
+    <title>Buy Pictures</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Подключаем TON Connect -->
+    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+
 </head>
 <body>
-    <div id="bot">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum</p>
-        <button>Buy</button>
+
+    <div class="shop-container">
+        <div class="product">
+            <img src="https://via.placeholder.com/250x250" alt="Product 1">
+            <label for="qty1">Количество:</label>
+            <input type="number" id="qty1" min="1" value="1">
+            <button class="buy-button" onclick="buyProduct(1)">Купить</button>
+        </div>
+        <div class="product">
+            <img src="https://via.placeholder.com/250x250" alt="Product 2">
+            <label for="qty2">Количество:</label>
+            <input type="number" id="qty2" min="1" value="1">
+            <button class="buy-button" onclick="buyProduct(2)">Купить</button>
+        </div>
+        <div class="product">
+            <img src="https://via.placeholder.com/250x250" alt="Product 3">
+            <label for="qty3">Количество:</label>
+            <input type="number" id="qty3" min="1" value="1">
+            <button class="buy-button" onclick="buyProduct(3)">Купить</button>
+        </div>
     </div>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <div id="ton-connect"></div>
+
+    <script>
+        // Инициализация TON Connect
+        const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+            manifestUrl: 'https://your-app-url/tonconnect-manifest.json', // Укажи правильный URL для манифеста
+            buttonRootId: 'ton-connect'  // ID для кнопки подключения к кошельку
+        });
+
+        // Цены на картинки в TON (можно изменить)
+        const productPrices = {
+            1: 1,  // Цена за картинку 1 — 1 TON
+            2: 1.5,  // Цена за картинку 2 — 1.5 TON
+            3: 2  // Цена за картинку 3 — 2 TON
+        };
+
+        // Функция для покупки товара
+        async function buyProduct(productId) {
+            const quantity = document.getElementById(`qty${productId}`).value;
+            const priceInTON = productPrices[productId] * quantity; // Вычисляем общую цену
+            const amountInNanoTON = BigInt(priceInTON * 1e9);  // Преобразуем в нанотоны
+
+            const transaction = {
+                messages: [
+                    {
+                        address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // адрес назначения
+                        amount: amountInNanoTON.toString() // Сумма в нанотонах
+                    }
+                ]
+            };
+
+            try {
+                // Подключение кошелька
+                const connectedWallet = await tonConnectUI.connectWallet();
+                console.log("Connected wallet:", connectedWallet);
+
+                // Отправка транзакции
+                const result = await tonConnectUI.sendTransaction(transaction);
+                console.log("Transaction result:", result);
+
+                alert(`Вы успешно купили ${quantity} штук товара ${productId}!`);
+            } catch (error) {
+                console.error("Error sending transaction:", error);
+                alert("Ошибка при отправке транзакции. Попробуйте снова.");
+            }
+        }
+    </script>
+
 </body>
 </html>
